@@ -28,7 +28,7 @@ private PersonInfo personInfo;
 			JOptionPane.showMessageDialog(null, "No keyword, wtf u expecting mate");
 		} else {
 			chromeDriver.get("https://sg.carousell.com/search/products/?query=" + keyword);
-			System.out.println("keyword input");
+			
 		}
 	}
 
