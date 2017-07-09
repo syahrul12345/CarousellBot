@@ -1,7 +1,11 @@
 package gui;
 
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -14,6 +18,7 @@ public class Controller {
 private JPanel panel;
 IndividualInfo individualInfo = new IndividualInfo();
 SaleInfo saleInfo = new SaleInfo();
+
 	public Controller() {
 		
 	}
@@ -57,6 +62,8 @@ SaleInfo saleInfo = new SaleInfo();
 			String cond = saleInfo.getCond();
 			String descText = saleInfo.getDescription();
 			String deliveroption = saleInfo.getDeliveroption();
+			String path = saleInfo.getPath();
+			
 			chromeDriver.findElement(By.xpath("//a[@id='navbarSellLink']")).click();
 			chromeDriver.findElement(By.xpath("//input[@placeholder='Item name']")).sendKeys(itemName);
 			chromeDriver.findElement(By.xpath("//div[@id='sellFormCategoryDropdown']")).click();
@@ -70,12 +77,14 @@ SaleInfo saleInfo = new SaleInfo();
 				chromeDriver.findElement(By.xpath("//label[@for='formSellUsedCondition']")).click();
 			}
 			chromeDriver.findElement(By.id("formSellDescription")).sendKeys(descText);
-			if(deliveroption.equals("Meetupsp")) {
+			if(deliveroption.equals("meetup")) {
 				chromeDriver.findElement(By.xpath("//label[@for='formSellDeliveryMeetupOption']")).click();
 			} else if(deliveroption.equals("delivery")) {
 				chromeDriver.findElement(By.xpath("//label[@for='formSellDeliveryMailOption']")).click();
 
 			}
+			chromeDriver.findElement(By.id("photo0")).sendKeys(path);
+			chromeDriver.findElement(By.xpath("//*[@id='root']/div/div[1]/div/div/div[2]/div/form/div[4]/button")).click();
 			
 		}
 	}
@@ -87,8 +96,18 @@ SaleInfo saleInfo = new SaleInfo();
 	}
 
 	public void addSaleInfo(String itemName, String itemCat, String price, String cond, String description,
-			String deliveroption) {
-			saleInfo.addInfo(itemName,itemCat,price,cond,description,deliveroption);
+			String deliveroption, String path) {
+			saleInfo.addInfo(itemName,itemCat,price,cond,description,deliveroption,path);
+	}
+
+	public void loadImage(String path) {
+		saleInfo.setPath(path);
+		
+		
+	}
+
+	public String getPath() {
+		return saleInfo.getPath();
 	}
 
 	

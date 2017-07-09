@@ -1,5 +1,7 @@
 package gui;
 
+import java.awt.Image;
+
 public class SaleInfo {
 private String itemName;
 private String itemCat;
@@ -7,14 +9,17 @@ private String price;
 private String cond;
 private String description;
 private String deliveroption;
+private String path;
+private Image image;
 
-	public void addInfo(String itemName, String itemCat, String price2, String cond, String description, String deliveroption) {
+	public void addInfo(String itemName, String itemCat, String price2, String cond, String description, String deliveroption, String path2) {
 		this.itemName = itemName;
 		this.itemCat = itemCat;
 		this.price = price2;
 		this.cond = cond;
 		this.description = description;
 		this.deliveroption = deliveroption;
+		this.path = path2;
 		
 	
 	}
@@ -65,6 +70,15 @@ private String deliveroption;
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public void setPath(String path) {
+		this.path=path;
+		
+	}
+
+	public String getPath() {
+		return path;
 	}
 
 }

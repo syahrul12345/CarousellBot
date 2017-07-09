@@ -5,10 +5,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.nio.file.Paths;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -27,6 +28,7 @@ public class MainFrame extends JFrame {
 	private Controller controller;
 	private InfoDialog infoDialog;
 	private JButton revealBtn;
+	private Image img;
 	
 	public MainFrame() {
 		super("Carousell Bot");
@@ -57,8 +59,9 @@ public class MainFrame extends JFrame {
 				String cond = infoDialog.getItemCond();
 				String description = infoDialog.getItemText();
 				String delivery = infoDialog.getItemDelivery();
+				String path = infoDialog.getPath();
 				controller.addPersonInfo(username,keyword,password);
-				controller.addSaleInfo(itemName, itemCat, price, cond, description, delivery);
+				controller.addSaleInfo(itemName, itemCat, price, cond, description, delivery,path);
 				try {
 					controller.execute();
 				} catch (InterruptedException e1) {

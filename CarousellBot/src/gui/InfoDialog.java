@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +14,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,6 +34,8 @@ public class InfoDialog extends JDialog {
 	private ButtonGroup deliveryGroup;
 	private JButton okBtn;
 	private JButton cancelBtn;
+	private JButton imgBtn;
+	private JFileChooser fileChooser;
 	private Controller controller;
 	private String itemName;
 	private String itemCat;
@@ -39,6 +43,7 @@ public class InfoDialog extends JDialog {
 	private String itemText;
 	private double itemPrice;
 	private String itemDelivery;
+	private String path;
 	public InfoDialog(JFrame parent) {
 		super(parent,"Sales Input",null);
 		itemField = new JTextField(20);
@@ -54,8 +59,11 @@ public class InfoDialog extends JDialog {
 		deliveryBtn = new JRadioButton("Delivery");
 		deliveryBtn.setActionCommand("delivery");
 		okBtn = new JButton("OK");
-		cancelBtn = new JButton("Canel");
+		cancelBtn = new JButton("Cancel");
+		imgBtn = new JButton("Image");
 		controller = new Controller();
+		fileChooser = new JFileChooser();
+		
 		
 		
 		DefaultComboBoxModel<String> saleType = new DefaultComboBoxModel<String>();
@@ -84,12 +92,26 @@ public class InfoDialog extends JDialog {
 				setItemText(description);
 				String deliveryoption = deliveryGroup.getSelection().getActionCommand();
 				setItemDelivery(deliveryoption);
+				String path = controller.getPath();
+				setPath(path);
 				setVisible(false);
+				
 			}
+
 		});
 		cancelBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(ABORT);
+			}
+			
+		});
+		imgBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(fileChooser.showOpenDialog(InfoDialog.this) == JFileChooser.APPROVE_OPTION ) {
+					String path = fileChooser.getSelectedFile().getAbsolutePath();
+					controller.loadImage(path);
+					
+				}
 			}
 			
 		});
@@ -100,6 +122,12 @@ public class InfoDialog extends JDialog {
 		
 	}
 	
+	public void setPath(String path) {
+		this.path=path;
+	}
+	public String getPath() {
+		return path;
+	}
 
 	public String getItemName() {
 		return itemName;
@@ -189,28 +217,33 @@ public class InfoDialog extends JDialog {
 		gc.gridx++;
 		gc.insets = new Insets(0,0,0,5);
 		gc.anchor = GridBagConstraints.FIRST_LINE_START;
+		gc.fill = GridBagConstraints.HORIZONTAL;
 		add(itemField,gc);
 		//row2//
 		gc.gridx=1;
 		gc.gridy++;
 		gc.insets = new Insets(5,0,0,5);
 		gc.anchor = GridBagConstraints.FIRST_LINE_END;
+		gc.fill= GridBagConstraints.NONE;
 		add(new JLabel("Item Category: "),gc);
 		
 		gc.gridx++;
 		gc.insets = new Insets(0,0,0,5);
 		gc.anchor = GridBagConstraints.FIRST_LINE_START;
+		gc.fill = GridBagConstraints.HORIZONTAL;
 		add(itemCategory,gc);
 		
 		//row 3//
 		gc.gridx=1;
 		gc.gridy++;gc.insets = new Insets(5,0,0,5);
 		gc.anchor = GridBagConstraints.FIRST_LINE_END;
+		gc.fill= GridBagConstraints.NONE;
 		add(new JLabel("Price:"),gc);
 		
 		gc.gridx++;
 		gc.insets = new Insets(0,0,0,5);
 		gc.anchor = GridBagConstraints.FIRST_LINE_START;
+		gc.fill = GridBagConstraints.HORIZONTAL;
 		add(priceField,gc);
 		
 		//row 4//
@@ -218,11 +251,13 @@ public class InfoDialog extends JDialog {
 		gc.gridy++;
 		gc.insets = new Insets(5,0,0,5);
 		gc.anchor = GridBagConstraints.FIRST_LINE_END;
+		gc.fill= GridBagConstraints.NONE;
 		add(new JLabel("Condition:"),gc);
 		
 		gc.gridx++;
 		gc.insets = new Insets(0,0,0,5);
 		gc.anchor = GridBagConstraints.FIRST_LINE_START;
+		
 		add(buttonPanel1,gc);
 		
 		//row5//
@@ -254,10 +289,14 @@ public class InfoDialog extends JDialog {
 		//row7//
 		gc.gridx=1;
 		gc.gridy++;
+		gc.fill=GridBagConstraints.BOTH;
 		add(okBtn,gc);
 		
 		gc.gridx++;
 		add(cancelBtn,gc);
+		
+		gc.gridx++;
+		add(imgBtn,gc);
 		
 		
 	}
