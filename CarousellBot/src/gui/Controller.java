@@ -1,4 +1,4 @@
-package Model;
+package gui;
 
 import java.util.ArrayList;
 
@@ -9,30 +9,31 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+
 public class Controller {
-private PersonInfo personInfo;
 private JPanel panel;
+IndividualInfo individualInfo = new IndividualInfo();
+SaleInfo saleInfo = new SaleInfo();
 	public Controller() {
 		
 	}
-	public void write(String username, String password, String keyword) {
-		personInfo = new PersonInfo(username,password,keyword);
-	}
-	public void execute() {
+	
+	public void execute() throws InterruptedException {
 		System.setProperty("webdriver.chrome.driver","/Users/muhdsyahrulnizam/Downloads/chromedriver");
 		WebDriver chromeDriver = new ChromeDriver();
-		String username = personInfo.getUsername();
-		String password = personInfo.getPassword();
-		String keyword = personInfo.getKeyword();
+		String username = individualInfo.getUsername();
+		String password = individualInfo.getPassword();
+		String keyword = individualInfo.getKeyword();
 		panel = new JPanel();
 		ArrayList<String> list = new ArrayList<String>();
 		chromeDriver.get("https://sg.carousell.com/login/?intent_sell=1&next=/");
 		chromeDriver.findElement(By.id("username")).sendKeys(username);
 		chromeDriver.findElement(By.id("password")).sendKeys(password);
 		chromeDriver.findElement(By.xpath("//*[@id='root']/div/div[1]/div/form/button")).click();
-		
+		Thread.sleep(1000);
 		if(chromeDriver.getCurrentUrl().equals("https://sg.carousell.com/login/?intent_sell=1&next=/")) {
 			JOptionPane.showMessageDialog(panel, "Incorrect log in info!");
+			
 		}
 		if(keyword.equals("")) {
 			JOptionPane.showMessageDialog(null, "No keyword, wtf u expecting mate");
@@ -49,29 +50,53 @@ private JPanel panel;
 			JOptionPane.showMessageDialog(panel, "You already have a listing");
 			chromeDriver.close();
 		} else {
-			String set = "new"; //convert to input field
-			String meet = "meetup"; //convert to input field
-			String descText = "text"; //convert to input field
+			
+			String itemName = saleInfo.getItemName();
+			String itemCat = saleInfo.getItemCat();
+			String price = saleInfo.getPrice();
+			String cond = saleInfo.getCond();
+			String descText = saleInfo.getDescription();
+			String deliveroption = saleInfo.getDeliveroption();
 			chromeDriver.findElement(By.xpath("//a[@id='navbarSellLink']")).click();
-			chromeDriver.findElement(By.xpath("//input[@placeholder='Item name']")).sendKeys(keyword);
+			chromeDriver.findElement(By.xpath("//input[@placeholder='Item name']")).sendKeys(itemName);
 			chromeDriver.findElement(By.xpath("//div[@id='sellFormCategoryDropdown']")).click();
 			chromeDriver.findElement(By.xpath("//div[contains(text(),'Everything Else')]")).click();
 			chromeDriver.findElement((By.xpath("//div[contains(text(), 'Others')]"))).click();
-			chromeDriver.findElement(By.xpath("//input[@type ='number']")).sendKeys("200.000 this is hardcoded change later");
-			if(set.equals("new")) {
+			chromeDriver.findElement(By.xpath("//input[@type ='number']")).sendKeys(price);
+			
+			if(cond.equals("new")) {
 				chromeDriver.findElement(By.xpath("//label[@for='formSellNewCondition']")).click();
-			} else if(set.equals("used")) {
+			} else if(cond.equals("used")) {
 				chromeDriver.findElement(By.xpath("//label[@for='formSellUsedCondition']")).click();
 			}
 			chromeDriver.findElement(By.id("formSellDescription")).sendKeys(descText);
-			if(meet.equals("meetup")) {
+			if(deliveroption.equals("Meetupsp")) {
 				chromeDriver.findElement(By.xpath("//label[@for='formSellDeliveryMeetupOption']")).click();
-			} else if(meet.equals("delivery")) {
+			} else if(deliveroption.equals("delivery")) {
 				chromeDriver.findElement(By.xpath("//label[@for='formSellDeliveryMailOption']")).click();
 
 			}
 			
 		}
 	}
+
+
+	public void addPersonInfo(String username, String keyword, String password) {
+		individualInfo.addInfo(username,keyword,password);
+		
+	}
+
+	public void addSaleInfo(String itemName, String itemCat, String price, String cond, String description,
+			String deliveroption) {
+			saleInfo.addInfo(itemName,itemCat,price,cond,description,deliveroption);
+	}
+
+	
+
+
+	
+
+	
+	
 
 }

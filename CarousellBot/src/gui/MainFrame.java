@@ -1,4 +1,4 @@
-package Model;
+package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+
 public class MainFrame extends JFrame {
 	private JTextField userField;
 	private JPasswordField passwordField;
@@ -24,6 +25,9 @@ public class MainFrame extends JFrame {
 	private JButton okBtn;
 	private JButton cancelBtn;
 	private Controller controller;
+	private InfoDialog infoDialog;
+	private JButton revealBtn;
+	
 	public MainFrame() {
 		super("Carousell Bot");
 		userField = new JTextField(10);
@@ -32,6 +36,8 @@ public class MainFrame extends JFrame {
 		okBtn= new JButton("OK");
 		cancelBtn = new JButton("Close");
 		controller = new Controller();
+		revealBtn = new JButton("Reveal");
+		infoDialog = new InfoDialog(this);
 		
 		cancelBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -45,8 +51,27 @@ public class MainFrame extends JFrame {
 				String username = userField.getText();
 				String password = new String(passwordField.getPassword());
 				String keyword = keywordField.getText();
-				controller.write(username,password,keyword);
-				controller.execute();
+				String itemName = infoDialog.getItemName();
+				String itemCat = infoDialog.getItemCat();
+				String price = Double.toString(infoDialog.getItemPrice());
+				String cond = infoDialog.getItemCond();
+				String description = infoDialog.getItemText();
+				String delivery = infoDialog.getItemDelivery();
+				controller.addPersonInfo(username,keyword,password);
+				controller.addSaleInfo(itemName, itemCat, price, cond, description, delivery);
+				try {
+					controller.execute();
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+			
+		});
+		revealBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				infoDialog.setVisible(true);
 			}
 			
 		});
@@ -91,6 +116,7 @@ public class MainFrame extends JFrame {
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		buttonPanel.add(okBtn);
 		buttonPanel.add(cancelBtn);
+		buttonPanel.add(revealBtn);
 		
 		this.setLayout(new BorderLayout());
 		add(fieldPanel,BorderLayout.NORTH);
